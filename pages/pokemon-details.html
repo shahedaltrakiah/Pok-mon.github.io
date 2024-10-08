@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Details</title>
+
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .pokemon-details {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .pokemon-details img {
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Pokémon Details</h1>
+
+    <div class="pokemon-details" id="pokemonDetails">
+        <img id="pokemonImage" src="" alt="Pokémon Image">
+        <h2 id="pokemonName">Name</h2>
+        <p id="pokemonNumber">Number: #</p>
+        <p id="pokemonTypes">Types: </p>
+        <p id="pokemonHeight">Height: </p>
+        <p id="pokemonWeight">Weight: </p>
+    </div>
+
+    <script>
+        async function fetchPokemonDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const pokemonName = params.get('name');
+
+            const url = `https://pokeapi.co/api/v2/pokemon/${pokemonName}`;
+            try {
+                const response = await fetch(url);
+                const pokemonDetails = await response.json();
+
+                document.getElementById('pokemonImage').src = pokemonDetails.sprites.front_default;
+                document.getElementById('pokemonName').textContent = pokemonDetails.name;
+                document.getElementById('pokemonNumber').textContent = `Number: #${pokemonDetails.id}`;
+                document.getElementById('pokemonTypes').textContent = `Types: ${pokemonDetails.type}`;
+                document.getElementById('pokemonHeight').textContent = `Height: ${pokemonDetails.height / 10} m`;
+                document.getElementById('pokemonWeight').textContent = `Weight: ${pokemonDetails.weight / 10} kg`;
+                
+            } catch (error) {
+                console.error('Error fetching Pokémon details:', error);
+            }
+        }
+        window.onload = fetchPokemonDetails;
+    </script>
+
+</body>
+
+</html>
